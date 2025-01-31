@@ -1,0 +1,27 @@
+function generateImage() {
+    const prompt = document.getElementById("prompt").value;
+    const imageContainer = document.getElementById("image-container");
+
+    if (prompt.trim() === "") {
+        alert("Please enter a prompt!");
+        return;
+    }
+
+    imageContainer.innerHTML = "<p>Generating image...</p>";
+
+    fetch("http://localhost:5000/generate", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ prompt: prompt })
+    })
+    .then(response => response.json())
+    .then(data => {
+        imageContainer.innerHTML = `<img src="${data.image_url}" alt="Generated Image">`;
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        imageContainer.innerHTML = "<p>Something went wrong!</p>";
+    });
+}
